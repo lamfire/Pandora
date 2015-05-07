@@ -48,7 +48,7 @@ public class PandoraTester {
         size();
 
         FireMap map = store.getFireMap("STORE_MAP_TEST");
-        map.put("1","1".getBytes());
+        map.put("1".getBytes(),"1".getBytes());
         keys();
         size();
 

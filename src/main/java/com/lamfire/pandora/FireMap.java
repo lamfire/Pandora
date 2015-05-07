@@ -4,14 +4,14 @@ import java.util.List;
 
 public interface FireMap extends FireCollection {
 
-    public void put(String key, byte[] value);
+    public void put(byte[] key, byte[] value);
 
-    public List<String> keys();
+    public List<byte[]> keys();
 
-    public byte[] get(String key);
+    public byte[] get(byte[] key);
 
-    public void remove(String key);
+    public void remove(byte[] key);
 
-    public boolean exists(String key);
+    public boolean exists(byte[] key);
 
 }

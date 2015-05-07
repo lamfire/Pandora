@@ -30,14 +30,14 @@ public class FireMapTester {
         String field = "TEST1";
         String value = "22222222222222";
         long startAt = System.currentTimeMillis();
-        map.put(field, value.getBytes());
+        map.put(field.getBytes(), value.getBytes());
         long timeUsed = System.currentTimeMillis() - startAt;
         System.out.println("map.put('"+field+"','"+value+"') time_millis:" + timeUsed+ " ms");
 
         field = "TEST0";
         value =  RandomUtils.randomTextWithFixedLength(1024);
         startAt = System.currentTimeMillis();
-        map.put(field, value.getBytes());
+        map.put(field.getBytes(), value.getBytes());
         timeUsed = System.currentTimeMillis() - startAt;
         System.out.println("map.put('"+field+"','"+value+"') time_millis:" + timeUsed+ " ms");
 
@@ -48,26 +48,26 @@ public class FireMapTester {
 
 
         startAt = System.currentTimeMillis();
-        value = new String(map.get(field));
+        value = new String(map.get(field.getBytes()));
         timeUsed = System.currentTimeMillis() - startAt;
         System.out.println("map.get("+field+"):"+value+" ,time_millis:" + timeUsed + " ms");
 
         startAt = System.currentTimeMillis();
         field = "TEST1";
-        value =new String(map.get(field));
+        value =new String(map.get(field.getBytes()));
         timeUsed = System.currentTimeMillis() - startAt;
         System.out.println("map.get("+field+"):"+value+" ,time_millis:" + timeUsed + " ms");
         Asserts.assertEquals(value, "22222222222222");
 
         startAt = System.currentTimeMillis();
-        boolean exists =  map.exists(field);
+        boolean exists =  map.exists(field.getBytes());
         timeUsed = System.currentTimeMillis() - startAt;
         System.out.println("map.exists("+field+") :"+exists+",time_millis:" + timeUsed + " ms");
         Asserts.assertTrue(exists);
 
 
         startAt = System.currentTimeMillis();
-        map.remove(field);
+        map.remove(field.getBytes());
         timeUsed = System.currentTimeMillis() - startAt;
         System.out.println("map.remove("+field +") time_millis:" + timeUsed + " ms");
 
@@ -77,13 +77,15 @@ public class FireMapTester {
 
 
         startAt = System.currentTimeMillis();
-        exists =  map.exists(field);
+        exists =  map.exists(field.getBytes());
         timeUsed = System.currentTimeMillis() - startAt;
         System.out.println("map.exists("+field+") :"+exists+",time_millis:" + timeUsed + " ms");
         Asserts.assertFalse(exists);
 
-        List<String> keys = map.keys();
-        System.out.println(keys);
+        List<byte[]> keys = map.keys();
+        for(byte[] bytes : keys){
+            System.out.println(new String(bytes));
+        }
 
         System.out.println("<<== finish : " + this.getClass().getName());
     }

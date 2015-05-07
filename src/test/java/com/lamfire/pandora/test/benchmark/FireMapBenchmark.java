@@ -36,7 +36,7 @@ public class FireMapBenchmark {
 
     private void put(String v,byte[] bytes){
         try{
-            map.put(v,bytes);
+            map.put(v.getBytes(),bytes);
         }   catch(Exception e){
              e.printStackTrace();
             errorAtomic.getAndIncrement();
@@ -48,7 +48,7 @@ public class FireMapBenchmark {
         String key = String.valueOf(val);
         long startAt = System.currentTimeMillis();
         try{
-            return map.get(key);
+            return map.get(key.getBytes());
         }   catch (Exception e){
             logger.error("error get (" + val +")",e);
             errorAtomic.getAndIncrement();

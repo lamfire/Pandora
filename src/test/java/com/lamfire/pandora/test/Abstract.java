@@ -18,7 +18,7 @@ public abstract class Abstract {
         if(pandora != null){
             return pandora;
         }
-        PandoraMaker maker = new PandoraMaker("/data/pandora" ,"TEST");
+        PandoraMaker maker = new PandoraMaker("/data/pandora");
         maker.createIfMissing(true);
         pandora = maker.make();
         return pandora;

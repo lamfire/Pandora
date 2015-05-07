@@ -3,6 +3,7 @@ package com.lamfire.pandora;
 import com.lamfire.utils.Lists;
 import org.iq80.leveldb.DBIterator;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -45,14 +46,13 @@ class LDBFireMap implements FireMap {
     }
 
     @Override
-    public void put(String key, byte[] value) {
+    public void put(byte[] key, byte[] value) {
         try{
             lock.lock();
-            byte[] keyBytes =asBytes(key);
-            byte[] oldValue = getDB().get(keyBytes);
+            byte[] oldValue = getDB().get(key);
 
-            if(!value.equals(oldValue)){
-                getDB().put(asBytes(key),value);
+            if(!Arrays.equals(value,oldValue)){
+                getDB().put(key,value);
             }
 
             if(oldValue == null && value != null){
@@ -64,16 +64,16 @@ class LDBFireMap implements FireMap {
     }
 
     @Override
-    public List<String> keys() {
+    public List<byte[]> keys() {
         DBIterator it =  getDB().iterator();
         try{
             lock.lock();
-            List<String> keys = Lists.newArrayList();
+            List<byte[]> keys = Lists.newArrayList();
 
             it.seekToFirst();
             while(it.hasNext()){
                 byte[] keyBytes = it.next().getKey();
-                keys.add(asString(keyBytes));
+                keys.add((keyBytes));
             }
             return keys;
         }finally {
@@ -83,22 +83,21 @@ class LDBFireMap implements FireMap {
     }
 
     @Override
-    public byte[] get(String key) {
+    public byte[] get(byte[] key) {
         try{
             lock.lock();
-            return getDB().get(asBytes(key));
+            return getDB().get((key));
         }finally {
             lock.unlock();
         }
     }
 
     @Override
-    public synchronized void remove(String key) {
+    public synchronized void remove(byte[] key) {
         try{
             lock.lock();
-            byte[] keyBytes =asBytes(key);
-            byte[] oldValue = getDB().get(keyBytes);
-            getDB().delete(keyBytes);
+            byte[] oldValue = getDB().get(key);
+            getDB().delete(key);
             if(oldValue != null){
                 incrSize(-1);
             }
@@ -108,7 +107,7 @@ class LDBFireMap implements FireMap {
     }
 
     @Override
-    public boolean exists(String key) {
+    public boolean exists(byte[] key) {
         try{
             lock.lock();
             return get(key)!=null;

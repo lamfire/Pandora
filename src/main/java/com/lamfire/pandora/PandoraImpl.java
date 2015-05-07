@@ -18,24 +18,21 @@ public class PandoraImpl implements Pandora {
 
     private final Map<String, FireCollection> dbs = Maps.newHashMap();
     private final Map<String,String> databaseNames = Maps.newHashMap();
-    private final String name;
     private final String storageDir;
     private final LDBManager manager;
     private final LDBMeta meta;
 
-    public PandoraImpl(String storageDir, String name){
-        LOGGER.info("Make 'PandoraImpl' : " + storageDir + " - " + name);
+    public PandoraImpl(String storageDir){
+        LOGGER.info("Make 'PandoraImpl' : " + storageDir);
         this.storageDir = storageDir;
-        this.name = name;
         this.manager = new LDBManager(storageDir);
         this.meta = new LDBMeta(this.manager);
         loadExistsDatabaseInfo();
     }
 
-    public PandoraImpl(String storageDir, String name, PandoraOptions options){
-        LOGGER.info("Make 'PandoraImpl' : " + storageDir + " - " + name);
+    public PandoraImpl(String storageDir, PandoraOptions options){
+        LOGGER.info("Make 'PandoraImpl' : " + storageDir);
         this.storageDir = storageDir;
-        this.name = name;
         this.manager = new LDBManager(storageDir,options);
         this.meta = new LDBMeta(this.manager);
         loadExistsDatabaseInfo();

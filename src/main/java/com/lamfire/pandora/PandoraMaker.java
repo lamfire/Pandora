@@ -8,16 +8,10 @@ package com.lamfire.pandora;
  * To change this template use File | Settings | File Templates.
  */
 public class PandoraMaker extends PandoraOptions{
-    private String name;
     private String storeDir;
 
-    public PandoraMaker(String storeDir , String name){
-        this.name = name;
+    public PandoraMaker(String storeDir){
         this.storeDir = storeDir;
-    }
-
-    public String name(){
-        return name;
     }
 
     public String storeDir(){
@@ -25,6 +19,6 @@ public class PandoraMaker extends PandoraOptions{
     }
 
     public Pandora make(){
-        return new PandoraImpl(storeDir,name,this);
+        return new PandoraImpl(storeDir,this);
     }
 }

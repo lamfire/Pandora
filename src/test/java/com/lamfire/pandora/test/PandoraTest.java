@@ -2,6 +2,10 @@ package com.lamfire.pandora.test;
 
 import com.lamfire.pandora.test.tester.*;
 import com.lamfire.pandora.*;
+import com.lamfire.utils.ArrayUtils;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 /**
  * Created with IntelliJ IDEA.
@@ -64,7 +68,7 @@ public class PandoraTest extends Abstract{
     }
 
     public static void main(String[] args){
-        PandoraMaker maker = new PandoraMaker("/data/pandora" ,"TEST1");
+        PandoraMaker maker = new PandoraMaker("/data/pandora");
         maker.createIfMissing(true);
         Pandora pandora = maker.make();
         testAll(pandora);
