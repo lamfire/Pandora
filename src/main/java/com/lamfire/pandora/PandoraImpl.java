@@ -13,7 +13,7 @@ import java.util.Set;
  * Time: 下午3:59
  * To change this template use File | Settings | File Templates.
  */
-public class PandoraImpl implements Pandora {
+class PandoraImpl implements Pandora {
     private static final Logger LOGGER = Logger.getLogger(PandoraImpl.class);
 
     private final Map<String, FireCollection> dbs = Maps.newHashMap();
