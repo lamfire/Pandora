@@ -2,7 +2,7 @@ package com.lamfire.pandora;
 
 public interface FireCollection {
 
-    public long size();
+    public int size();
 
     public void clear();
 

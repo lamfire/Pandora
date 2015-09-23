@@ -127,10 +127,10 @@ class LDBFireIncrement implements FireIncrement {
     }
 
     @Override
-    public long size() {
+    public int size() {
         try {
             lock.lock();
-            return meta.getValueAsLong(this.sizeKey);
+            return (int)meta.getValueAsLong(this.sizeKey);
         } finally {
             lock.unlock();
         }

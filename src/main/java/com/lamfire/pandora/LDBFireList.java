@@ -175,8 +175,8 @@ class LDBFireList implements FireList{
     }
 
     @Override
-    public long size() {
-        return getSize();
+    public int size() {
+        return (int)getSize();
     }
 
     @Override

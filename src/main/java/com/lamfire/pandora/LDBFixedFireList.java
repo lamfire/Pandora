@@ -112,8 +112,8 @@ class LDBFixedFireList implements FireList {
     }
 
     @Override
-    public long size() {
-        return getWriteIndex();
+    public int size() {
+        return (int)getWriteIndex();
     }
 
     @Override

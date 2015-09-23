@@ -1,5 +1,6 @@
 package com.lamfire.pandora;
 
+import java.util.Map;
 import java.util.Set;
 
 public interface Pandora {
@@ -22,5 +23,7 @@ public interface Pandora {
     public FireSet getFireSet(String key);
 
     public FireRank getFireRank(String key);
+
+    public Map<byte[] ,byte[]> getMap(String key);
 
 }

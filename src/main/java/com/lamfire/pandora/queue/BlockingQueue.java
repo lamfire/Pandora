@@ -57,7 +57,7 @@ public class BlockingQueue implements FireQueue {
     }
 
     @Override
-    public long size() {
+    public int size() {
         return this.queue.size();
     }
 

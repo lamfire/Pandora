@@ -166,4 +166,13 @@ class PandoraImpl implements Pandora {
         return result;
     }
 
+    public synchronized Map<byte[] ,byte[]> getMap(String key){
+        LDBMap result = (LDBMap)dbs.get(key);
+        if (result == null) {
+            result = new LDBMap(this.meta,new LDBDatabase(this.manager,key),key);
+            register(key, result);
+        }
+        return result;
+    }
+
 }

@@ -28,7 +28,7 @@ public class FireListTester {
 
         long size = list.size();
         System.out.println("list.size():"+size);
-        Asserts.assertEquals(size,0);
+        Asserts.equalsAssert(size,0);
 
         for(int i=0;i<elements;i++){
             String val = String.valueOf(i);
@@ -39,7 +39,7 @@ public class FireListTester {
         for(int i=0;i<elements;i++){
             String val = new String( list.get(i) ) ;
             System.out.println("list.get("+val+")");
-            Asserts.assertEquals( String.valueOf(i),val);
+            Asserts.equalsAssert( String.valueOf(i),val);
         }
 
         System.out.print("list.gets(2,5):" );
@@ -48,7 +48,7 @@ public class FireListTester {
         for(byte[] bytes : gets){
             String v = new String(bytes);
             System.out.print(v +" ");
-            Asserts.assertEquals( String.valueOf(2+i),v);
+            Asserts.equalsAssert( String.valueOf(2+i),v);
             i++;
         }
 
@@ -56,22 +56,22 @@ public class FireListTester {
 
         size = list.size();
         System.out.println("list.size():"+size);
-        Asserts.assertEquals(size,elements);
+        Asserts.equalsAssert(size,elements);
 
         String value = new String(list.get(44));
         System.out.println("list.get(44):"+value);
-        Asserts.assertEquals(value,"44");
+        Asserts.equalsAssert(value,"44");
 
         list.set(44,("1231231312313").getBytes());
         System.out.println("list.set(44,'1231231312313')");
 
         value = new String(list.get(44));
         System.out.println("list.get(44):"+value);
-        Asserts.assertEquals(value,"1231231312313");
+        Asserts.equalsAssert(value,"1231231312313");
 
         size = list.size();
         System.out.println("list.size():"+size);
-        Asserts.assertEquals(size,elements);
+        Asserts.equalsAssert(size,elements);
 
         //=================================================================remove
         list.remove(44);
@@ -79,11 +79,11 @@ public class FireListTester {
 
         value = new String(list.get(44));
         System.out.println("list.get(44):"+value);
-        Asserts.assertEquals(value,"45");
+        Asserts.equalsAssert(value,"45");
 
         size = list.size();
         System.out.println("list.size():"+size);
-        Asserts.assertEquals(size,elements - 1);
+        Asserts.equalsAssert(size,elements - 1);
 
         System.out.println("<<== finish : " + this.getClass().getName() + " - " + ( System.currentTimeMillis() - startAt) +"ms");
     }

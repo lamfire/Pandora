@@ -104,12 +104,12 @@ class LDBFireQueue implements FireQueue {
     }
 
     @Override
-    public long size() {
+    public int size() {
         try {
             lock.lock();
             long writeIndex = getWriteIndex();
             long readIndex = getReadIndex();
-            return writeIndex - readIndex;
+            return (int)(writeIndex - readIndex);
         } finally {
             lock.unlock();
         }
