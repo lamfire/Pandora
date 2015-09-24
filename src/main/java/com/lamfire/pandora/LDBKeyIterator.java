@@ -9,6 +9,7 @@ class LDBKeyIterator implements Iterator<byte[]> ,LDBIterator<byte[]>{
 
     LDBKeyIterator(LDBEntryIterator it){
         this.iterator = it;
+        this.iterator.seekToFirst();
     }
 
     @Override

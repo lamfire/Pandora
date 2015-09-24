@@ -18,6 +18,7 @@ class LDBValueIterator implements Iterator<byte[]>,LDBIterator<byte[]> {
 
     LDBValueIterator(LDBEntryIterator it){
         this.iterator = it;
+        this.iterator.seekToFirst();
     }
 
     @Override

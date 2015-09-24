@@ -29,7 +29,6 @@ class LDBEntryIterator implements LDBIterator<Map.Entry<byte[],byte[]>> {
         this.id = id;
         this.mgr = mgr;
         this.iterator = it;
-        this.iterator.seekToFirst();
     }
 
     public String getId(){
@@ -84,6 +83,79 @@ class LDBEntryIterator implements LDBIterator<Map.Entry<byte[],byte[]>> {
         } finally {
             lock.unlock();
         }
+    }
+
+    public boolean hasPrev() {
+        lastUseTimeMillis = System.currentTimeMillis();
+        try {
+            lock.lock();
+            if(closed){
+                return false;
+            }
+            boolean hasPrev =  iterator.hasPrev();
+            if(!hasPrev){
+                close();
+            }
+            return hasPrev;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public Map.Entry<byte[], byte[]> prev() {
+        lastUseTimeMillis = System.currentTimeMillis();
+        if(closed){
+            return null;
+        }
+        try {
+            lock.lock();
+            Map.Entry<byte[], byte[]> result =  iterator.prev();
+            return result;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public Map.Entry<byte[], byte[]> peekNext() {
+        lastUseTimeMillis = System.currentTimeMillis();
+        if(closed){
+            return null;
+        }
+        try {
+            lock.lock();
+            Map.Entry<byte[], byte[]> result =  iterator.peekNext();
+            return result;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public Map.Entry<byte[], byte[]> peekPrev() {
+        lastUseTimeMillis = System.currentTimeMillis();
+        if(closed){
+            return null;
+        }
+        try {
+            lock.lock();
+            Map.Entry<byte[], byte[]> result =  iterator.peekPrev();
+            return result;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void seekToFirst(){
+        if(closed){
+            return ;
+        }
+        iterator.seekToFirst();
+    }
+
+    public void seekToLast(){
+        if(closed){
+            return ;
+        }
+        iterator.seekToLast();
     }
 
     @Override

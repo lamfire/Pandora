@@ -302,7 +302,9 @@ class LDBMap implements Map<byte[] ,byte[]> ,FireCollection{
 
             @Override
             public Iterator<Entry<byte[], byte[]>> iterator() {
-                return LDBIteratorMgr.getInstance().openIterator(_db);
+                LDBEntryIterator it =  LDBIteratorMgr.getInstance().openIterator(_db);
+                it.seekToFirst();
+                return it;
             }
 
             @Deprecated
