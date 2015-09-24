@@ -175,4 +175,13 @@ class PandoraImpl implements Pandora {
         return result;
     }
 
+    public synchronized Set<byte[]> getSet(String key){
+        LDBSet result = (LDBSet)dbs.get(key);
+        if (result == null) {
+            result = new LDBSet(this.meta,new LDBDatabase(this.manager,key),key);
+            register(key, result);
+        }
+        return result;
+    }
+
 }

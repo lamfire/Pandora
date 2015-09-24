@@ -9,7 +9,7 @@ import java.util.Iterator;
  * Time: 下午3:28
  * To change this template use File | Settings | File Templates.
  */
-interface LDBIterator<E> extends Iterator<E> {
+public interface LDBIterator<E> extends Iterator<E> {
 
     public void close();
 

@@ -26,4 +26,6 @@ public interface Pandora {
 
     public Map<byte[] ,byte[]> getMap(String key);
 
+    public Set<byte[]> getSet(String key);
+
 }
