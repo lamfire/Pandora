@@ -12,7 +12,7 @@ import java.util.Map;
  * Time: 下午3:23
  * To change this template use File | Settings | File Templates.
  */
-class LDBValueIterator implements Iterator<byte[]> {
+class LDBValueIterator implements Iterator<byte[]>,LDBIterator<byte[]> {
     private LDBEntryIterator iterator;
 
 
@@ -37,5 +37,20 @@ class LDBValueIterator implements Iterator<byte[]> {
     @Override
     public void remove() {
         throw new RuntimeException("Not supported operation.");
+    }
+
+    @Override
+    public String getId() {
+        return iterator.getId();
+    }
+
+    @Override
+    public void close() {
+        iterator.close();
+    }
+
+    @Override
+    public long getLastUseTimeMillis() {
+        return iterator.getLastUseTimeMillis();
     }
 }

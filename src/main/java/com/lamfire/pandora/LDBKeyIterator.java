@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 
-class LDBKeyIterator implements Iterator<byte[]> {
+class LDBKeyIterator implements Iterator<byte[]> ,LDBIterator<byte[]>{
     private LDBEntryIterator iterator;
 
     LDBKeyIterator(LDBEntryIterator it){
@@ -28,5 +28,20 @@ class LDBKeyIterator implements Iterator<byte[]> {
     @Override
     public void remove() {
         throw new RuntimeException("Not supported operation.");
+    }
+
+    @Override
+    public String getId() {
+        return iterator.getId();
+    }
+
+    @Override
+    public void close() {
+        iterator.close();
+    }
+
+    @Override
+    public long getLastUseTimeMillis() {
+        return iterator.getLastUseTimeMillis();
     }
 }

@@ -3,6 +3,7 @@ package com.lamfire.pandora;
 import com.lamfire.logger.Logger;
 import com.lamfire.utils.Maps;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -179,6 +180,16 @@ class PandoraImpl implements Pandora {
         LDBSet result = (LDBSet)dbs.get(key);
         if (result == null) {
             result = new LDBSet(this.meta,new LDBDatabase(this.databaseMgr,key),key);
+            register(key, result);
+        }
+        return result;
+    }
+
+    @Override
+    public synchronized Collection<byte[]> getCollection(String key) {
+        LDBCollection result = (LDBCollection)dbs.get(key);
+        if (result == null) {
+            result = new LDBCollection(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;

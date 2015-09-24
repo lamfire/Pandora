@@ -1,5 +1,6 @@
 package com.lamfire.pandora;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,5 +28,7 @@ public interface Pandora {
     public Map<byte[] ,byte[]> getMap(String key);
 
     public Set<byte[]> getSet(String key);
+
+    public Collection<byte[]> getCollection(String key);
 
 }
