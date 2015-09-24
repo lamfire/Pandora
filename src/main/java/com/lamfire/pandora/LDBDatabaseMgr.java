@@ -3,6 +3,7 @@ package com.lamfire.pandora;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -14,8 +15,8 @@ import org.iq80.leveldb.*;
 
 import com.lamfire.logger.Logger;
 
-class LDBManager {
-	private static final Logger LOGGER = Logger.getLogger(LDBManager.class);
+class LDBDatabaseMgr {
+	private static final Logger LOGGER = Logger.getLogger(LDBDatabaseMgr.class);
     public static final String META_KEY_PREFIX_DATABASE = "[DATABASE]";
     public static final WriteOptions WRITE_SYNC = new WriteOptions();
 
@@ -30,19 +31,19 @@ class LDBManager {
 	private final String rootDir;
     private final Options options;
 
-	public LDBManager(String rootDir) {
+	public LDBDatabaseMgr(String rootDir) {
 		this.rootDir = rootDir;
         this.options = new Options();
         this.options.createIfMissing(true);
         this.factory = new JniDBFactory();
-        Threads.scheduleWithFixedDelay(new AutoCloseIdleDatabaseTask(),5,5, TimeUnit.MINUTES);
+        PandoraSchedules.scheduleWithFixedDelay(new AutoCloseIdleDatabaseTask(),5,5, TimeUnit.MINUTES);
 	}
 
-    public LDBManager(String rootDir, Options options) {
+    public LDBDatabaseMgr(String rootDir, Options options) {
         this.rootDir = rootDir;
         this.options = options;
         this.factory = new JniDBFactory();
-        Threads.scheduleWithFixedDelay(new AutoCloseIdleDatabaseTask(),5,5, TimeUnit.MINUTES);
+        PandoraSchedules.scheduleWithFixedDelay(new AutoCloseIdleDatabaseTask(),5,5, TimeUnit.MINUTES);
     }
 
     public String getDatabaseDir(String name){
@@ -176,6 +177,26 @@ class LDBManager {
         } catch (IOException e) {
             LOGGER.warn(e);
         }
+    }
+
+    public static void  closeIterator(Iterator<?> iterator){
+        if(iterator == null){
+            return;
+        }
+        if(iterator instanceof DBIterator){
+            DBIterator it = (DBIterator)iterator;
+            try {
+                it.close();
+            } catch (IOException e) {
+                LOGGER.warn(e);
+            }
+            return;
+        }
+        if( iterator instanceof LDBIterator){
+            LDBIterator it = (LDBIterator)iterator;
+            it.close();
+        }
+
     }
 
     static{

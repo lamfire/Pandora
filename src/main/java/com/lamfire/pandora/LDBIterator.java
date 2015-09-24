@@ -11,6 +11,9 @@ import java.util.Iterator;
  */
 public interface LDBIterator<E> extends Iterator<E> {
 
+    public String getId();
+
     public void close();
 
+    public long getLastUseTimeMillis();
 }

@@ -13,16 +13,20 @@ import java.io.IOException;
  */
 class LDBDatabase implements DB {
     private static final com.lamfire.logger.Logger LOGGER = com.lamfire.logger.Logger.getLogger(LDBDatabase.class);
-    private final LDBManager manager;
+    private final LDBDatabaseMgr databaseMgr;
     private final String name;
 
-    LDBDatabase(LDBManager manager,String name){
-        this.manager = manager;
+    LDBDatabase(LDBDatabaseMgr databaseMgr,String name){
+        this.databaseMgr = databaseMgr;
         this.name = name;
     }
 
     DB _db(){
-         return manager._db(name);
+         return databaseMgr._db(name);
+    }
+
+    public String getName(){
+        return name;
     }
 
     @Override
@@ -120,14 +124,14 @@ class LDBDatabase implements DB {
 
     @Override
     public void close() throws IOException {
-        manager.closeDB(name);
+        databaseMgr.closeDB(name);
     }
 
     public void clear(){
-        manager.deleteDB(name);
+        databaseMgr.deleteDB(name);
     }
 
     public void delete(){
-        manager.deleteDB(name);
+        databaseMgr.deleteDB(name);
     }
 }

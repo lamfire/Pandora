@@ -71,7 +71,7 @@ public class LDBSet implements Set<byte[]> ,FireCollection{
 
     @Override
     public Iterator<byte[]> iterator() {
-        return new LDBKeyIterator(_db.iterator());
+        return new LDBKeyIterator(LDBIteratorMgr.getInstance().openIterator(_db));
     }
 
     @Override

@@ -38,11 +38,11 @@ class LDBFireMap implements FireMap {
     }
 
     byte[] asBytes(String message) {
-        return LDBManager.asBytes(message);
+        return LDBDatabaseMgr.asBytes(message);
     }
 
     String asString(byte[] message) {
-        return LDBManager.asString(message);
+        return LDBDatabaseMgr.asString(message);
     }
 
     @Override
@@ -78,7 +78,7 @@ class LDBFireMap implements FireMap {
             return keys;
         }finally {
             lock.unlock();
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 

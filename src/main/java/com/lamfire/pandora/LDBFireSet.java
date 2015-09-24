@@ -38,11 +38,11 @@ class LDBFireSet implements FireSet {
     }
 
     byte[] asBytes(String message) {
-        return LDBManager.asBytes(message);
+        return LDBDatabaseMgr.asBytes(message);
     }
 
     String asString(byte[] message) {
-        return LDBManager.asString(message);
+        return LDBDatabaseMgr.asString(message);
     }
 
     private long hash(byte[] bytes) {
@@ -125,7 +125,7 @@ class LDBFireSet implements FireSet {
             throw new IndexOutOfBoundsException("Index " + index +",Size " + size());
         } finally {
             lock.unlock();
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 
@@ -151,7 +151,7 @@ class LDBFireSet implements FireSet {
             return list;
         } finally {
             lock.unlock();
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 

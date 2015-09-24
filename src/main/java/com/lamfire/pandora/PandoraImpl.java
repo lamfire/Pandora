@@ -19,32 +19,32 @@ class PandoraImpl implements Pandora {
     private final Map<String, FireCollection> dbs = Maps.newHashMap();
     private final Map<String,String> databaseNames = Maps.newHashMap();
     private final String storageDir;
-    private final LDBManager manager;
+    private final LDBDatabaseMgr databaseMgr;
     private final LDBMeta meta;
 
     public PandoraImpl(String storageDir){
         LOGGER.info("Make 'PandoraImpl' : " + storageDir);
         this.storageDir = storageDir;
-        this.manager = new LDBManager(storageDir);
-        this.meta = new LDBMeta(this.manager);
+        this.databaseMgr = new LDBDatabaseMgr(storageDir);
+        this.meta = new LDBMeta(this.databaseMgr);
         loadExistsDatabaseInfo();
     }
 
     public PandoraImpl(String storageDir, PandoraOptions options){
         LOGGER.info("Make 'PandoraImpl' : " + storageDir);
         this.storageDir = storageDir;
-        this.manager = new LDBManager(storageDir,options);
-        this.meta = new LDBMeta(this.manager);
+        this.databaseMgr = new LDBDatabaseMgr(storageDir,options);
+        this.meta = new LDBMeta(this.databaseMgr);
         loadExistsDatabaseInfo();
     }
 
     private void loadExistsDatabaseInfo(){
         //读取已经存在的DB
-        byte[] prefix = manager.asBytes(LDBManager.META_KEY_PREFIX_DATABASE);
+        byte[] prefix = databaseMgr.asBytes(LDBDatabaseMgr.META_KEY_PREFIX_DATABASE);
         Map<byte[],byte[]> map = meta.findByPrefix(prefix);
         for(Map.Entry<byte[] ,byte[]> e : map.entrySet()){
             String dbName = meta.getDatabaseNameByKey(e.getKey());
-            String clsName = manager.asString(e.getValue());
+            String clsName = databaseMgr.asString(e.getValue());
             databaseNames.put(dbName,clsName);
         }
     }
@@ -69,7 +69,7 @@ class PandoraImpl implements Pandora {
     private void register(String name,FireCollection col){
         String clsName = col.getClass().getSimpleName();
         byte[] dbKey = meta.getDatabaseKeyByName(name);
-        meta.setValue(dbKey, manager.asBytes(clsName));
+        meta.setValue(dbKey, databaseMgr.asBytes(clsName));
         databaseNames.put(name,clsName);
         dbs.put(name,col);
     }
@@ -110,7 +110,7 @@ class PandoraImpl implements Pandora {
     public synchronized FireIncrement getFireIncrement(String key) {
         FireIncrement result = (FireIncrement)dbs.get(key);
         if (result == null) {
-            result = new LDBFireIncrement(this.meta,new LDBDatabase(this.manager,key),key);
+            result = new LDBFireIncrement(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;
@@ -120,7 +120,7 @@ class PandoraImpl implements Pandora {
     public synchronized FireList getFireList(String key) {
         FireList result = (FireList)dbs.get(key);
         if (result == null) {
-            result = new LDBFireList(this.meta,new LDBDatabase(this.manager,key),key);
+            result = new LDBFireList(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;
@@ -130,7 +130,7 @@ class PandoraImpl implements Pandora {
     public synchronized FireMap getFireMap(String key) {
         FireMap result = (FireMap)dbs.get(key);
         if (result == null) {
-            result = new LDBFireMap(this.meta,new LDBDatabase(this.manager,key),key);
+            result = new LDBFireMap(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;
@@ -140,7 +140,7 @@ class PandoraImpl implements Pandora {
     public synchronized FireQueue getFireQueue(String key) {
         FireQueue result = (FireQueue)dbs.get(key);
         if (result == null) {
-            result = new LDBFireQueue(this.meta,new LDBDatabase(this.manager,key),key);
+            result = new LDBFireQueue(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;
@@ -150,7 +150,7 @@ class PandoraImpl implements Pandora {
     public synchronized FireSet getFireSet(String key) {
         FireSet result = (FireSet)dbs.get(key);
         if (result == null) {
-            result = new LDBFireSet(this.meta,new LDBDatabase(this.manager,key),key);
+            result = new LDBFireSet(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;
@@ -160,7 +160,7 @@ class PandoraImpl implements Pandora {
     public synchronized FireRank getFireRank(String key) {
         FireRank result = (FireRank)dbs.get(key);
         if (result == null) {
-            result = new LDBFireRank(this.meta,new LDBDatabase(this.manager,key),new LDBDatabase(this.manager,key+"_idx"),key);
+            result = new LDBFireRank(this.meta,new LDBDatabase(this.databaseMgr,key),new LDBDatabase(this.databaseMgr,key+"_idx"),key);
             register(key, result);
         }
         return result;
@@ -169,7 +169,7 @@ class PandoraImpl implements Pandora {
     public synchronized Map<byte[] ,byte[]> getMap(String key){
         LDBMap result = (LDBMap)dbs.get(key);
         if (result == null) {
-            result = new LDBMap(this.meta,new LDBDatabase(this.manager,key),key);
+            result = new LDBMap(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;
@@ -178,7 +178,7 @@ class PandoraImpl implements Pandora {
     public synchronized Set<byte[]> getSet(String key){
         LDBSet result = (LDBSet)dbs.get(key);
         if (result == null) {
-            result = new LDBSet(this.meta,new LDBDatabase(this.manager,key),key);
+            result = new LDBSet(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;

@@ -38,6 +38,8 @@ public class MapTester {
             int val = Bytes.toInt(bytes);
             Asserts.equalsAssert(val,i++);
         }
+
+        System.out.println("testKeySet - [OK]");
     }
 
     void testValues(){
@@ -55,6 +57,8 @@ public class MapTester {
             int val = Bytes.toInt(bytes);
             Asserts.equalsAssert(val,i++);
         }
+
+        System.out.println("testValues - [OK]");
     }
 
     void testEntrySet(){
@@ -75,6 +79,25 @@ public class MapTester {
             Asserts.equalsAssert(val,key);
             i++;
         }
+
+        System.out.println("testEntrySet - [OK]");
+    }
+
+    void testEmpty(){
+        map.clear();
+
+        Asserts.equalsAssert(map.size(),0);
+
+        int i=0;
+        for( Map.Entry<byte[], byte[]> e : map.entrySet()){
+            int key = Bytes.toInt(e.getKey());
+            int val = Bytes.toInt(e.getValue());
+            Asserts.equalsAssert(key,i);
+            Asserts.equalsAssert(val,i);
+            Asserts.equalsAssert(val,key);
+            i++;
+        }
+        System.out.println("testEmpty - [OK]");
     }
 
     public void test() {
@@ -85,6 +108,8 @@ public class MapTester {
         testValues();
 
         testEntrySet();
+
+        testEmpty();
 
         System.out.println("<<== finish : " + this.getClass().getName());
     }

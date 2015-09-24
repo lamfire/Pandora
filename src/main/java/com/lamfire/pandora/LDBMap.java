@@ -143,7 +143,7 @@ class LDBMap implements Map<byte[] ,byte[]> ,FireCollection{
 
             @Override
             public Iterator<byte[]> iterator() {
-                return new LDBKeyIterator(_db.iterator());
+                return new LDBKeyIterator(LDBIteratorMgr.getInstance().openIterator(_db));
             }
 
             @Deprecated
@@ -223,7 +223,7 @@ class LDBMap implements Map<byte[] ,byte[]> ,FireCollection{
 
             @Override
             public Iterator<byte[]> iterator() {
-                return new LDBValueIterator(_db.iterator());
+                return new LDBValueIterator(LDBIteratorMgr.getInstance().openIterator(_db));
             }
 
             @Deprecated
@@ -302,7 +302,7 @@ class LDBMap implements Map<byte[] ,byte[]> ,FireCollection{
 
             @Override
             public Iterator<Entry<byte[], byte[]>> iterator() {
-                return new LDBEntryIterator(_db.iterator());
+                return LDBIteratorMgr.getInstance().openIterator(_db);
             }
 
             @Deprecated

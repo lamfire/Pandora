@@ -30,8 +30,8 @@ class LDBMeta extends LDBDatabase{
 
     private Lock lock = new ReentrantLock();
 
-    public LDBMeta(LDBManager manager){
-        super(manager,META_NAME);
+    public LDBMeta(LDBDatabaseMgr databaseMgr){
+        super(databaseMgr,META_NAME);
     }
 
     public byte[] getSizeKey(String name){
@@ -148,7 +148,7 @@ class LDBMeta extends LDBDatabase{
             }
             return map;
         }finally {
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 
@@ -162,7 +162,7 @@ class LDBMeta extends LDBDatabase{
                 delete(key);
             }
         }finally {
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 

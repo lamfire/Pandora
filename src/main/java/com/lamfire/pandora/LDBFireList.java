@@ -76,7 +76,7 @@ class LDBFireList implements FireList{
             return entry;
         }finally {
             lock.unlock();
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 
@@ -152,7 +152,7 @@ class LDBFireList implements FireList{
 
         }finally {
             lock.unlock();
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
         return list;
     }

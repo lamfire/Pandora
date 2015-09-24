@@ -37,7 +37,7 @@ class LDBFireRank implements FireRank {
         this._indexDB = indexDB;
         this.name = name;
         this.sizeKey = meta.getSizeKey(name);
-        this.seed = MurmurHash.hash32(LDBManager.asBytes(name), seed);
+        this.seed = MurmurHash.hash32(LDBDatabaseMgr.asBytes(name), seed);
     }
 
 
@@ -58,11 +58,11 @@ class LDBFireRank implements FireRank {
     }
 
     byte[] asBytes(String message) {
-        return LDBManager.asBytes(message);
+        return LDBDatabaseMgr.asBytes(message);
     }
 
     String asString(byte[] message) {
-        return LDBManager.asString(message);
+        return LDBDatabaseMgr.asString(message);
     }
 
     public byte[] encodeScoreKey(String scoreKey, long score) {
@@ -250,7 +250,7 @@ class LDBFireRank implements FireRank {
             return result;
         }finally {
             lock.unlock();
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 
@@ -275,7 +275,7 @@ class LDBFireRank implements FireRank {
             return result;
         } finally {
             lock.unlock();
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 
@@ -320,7 +320,7 @@ class LDBFireRank implements FireRank {
             return result;
         } finally {
             lock.unlock();
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 
@@ -356,7 +356,7 @@ class LDBFireRank implements FireRank {
             return result;
         } finally {
             lock.unlock();
-            LDBManager.closeIterator(it);
+            LDBDatabaseMgr.closeIterator(it);
         }
     }
 

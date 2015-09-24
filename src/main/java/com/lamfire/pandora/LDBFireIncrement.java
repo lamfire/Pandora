@@ -39,7 +39,7 @@ class LDBFireIncrement implements FireIncrement {
     }
 
     byte[] asBytes(String message) {
-        return LDBManager.asBytes(message);
+        return LDBDatabaseMgr.asBytes(message);
     }
 
     @Override

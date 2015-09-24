@@ -20,27 +20,42 @@ class LDBEntryIterator implements LDBIterator<Map.Entry<byte[],byte[]>> {
     private final Lock lock = new ReentrantLock();
     private DBIterator iterator;
     private boolean closed = false;
+    private final String id;
+    private final LDBIteratorMgr mgr;
 
-    LDBEntryIterator(DBIterator it){
+    private long lastUseTimeMillis = System.currentTimeMillis();
+
+    LDBEntryIterator(String id,LDBIteratorMgr mgr ,DBIterator it){
+        this.id = id;
+        this.mgr = mgr;
         this.iterator = it;
         this.iterator.seekToFirst();
     }
 
+    public String getId(){
+        return id;
+    }
+
     @Override
     public void close(){
+        if(closed){
+            return;
+        }
         try {
             lock.lock();
-            closed = true;
-            iterator.close();
-        } catch (IOException e) {
+            this.iterator.close();
+            mgr.onIteratorClosed(this);
+        } catch (Exception e) {
             LOGGER.error(e.getMessage(),e);
         } finally {
+            closed = true;
             lock.unlock();
         }
     }
 
     @Override
     public boolean hasNext() {
+        lastUseTimeMillis = System.currentTimeMillis();
         try {
             lock.lock();
             if(closed){
@@ -58,6 +73,10 @@ class LDBEntryIterator implements LDBIterator<Map.Entry<byte[],byte[]>> {
 
     @Override
     public Map.Entry<byte[], byte[]> next() {
+        lastUseTimeMillis = System.currentTimeMillis();
+        if(closed){
+            return null;
+        }
         try {
             lock.lock();
             Map.Entry<byte[], byte[]> result =  iterator.next();
@@ -67,15 +86,18 @@ class LDBEntryIterator implements LDBIterator<Map.Entry<byte[],byte[]>> {
         }
     }
 
-    @Deprecated
     @Override
     public void remove() {
+        throw new RuntimeException("Not supported operation.");
+    }
 
+    public long getLastUseTimeMillis(){
+        return this.lastUseTimeMillis;
     }
 
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        close();
+        if(!closed)close();
     }
 }
