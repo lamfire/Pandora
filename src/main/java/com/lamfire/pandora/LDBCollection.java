@@ -1,21 +1,11 @@
 package com.lamfire.pandora;
 
 import com.lamfire.code.MurmurHash;
-import com.lamfire.utils.ArrayUtils;
-
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Created with IntelliJ IDEA.
- * User: linfan
- * Date: 15-9-24
- * Time: 下午3:45
- * To change this template use File | Settings | File Templates.
- */
 public class LDBCollection implements Collection<byte[]> ,FireCollection{
     private final Lock lock = new ReentrantLock();
     private final LDBMeta meta;
@@ -38,7 +28,7 @@ public class LDBCollection implements Collection<byte[]> ,FireCollection{
         return MurmurHash.hash32(bytes,13);
     }
 
-    int countElement(byte[] bytes){
+    public int count(byte[] bytes){
         int hash = hash(bytes);
         for(int i=0;i<Integer.MAX_VALUE;i++){
             String key = String.format("%d/%d",hash,i);
@@ -47,10 +37,16 @@ public class LDBCollection implements Collection<byte[]> ,FireCollection{
                 return i;
             }
         }
-        throw new RuntimeException("Not available key space,key offset Maximum.");
+        return Integer.MAX_VALUE;
     }
 
-    String key(byte[] bytes){
+    String key(byte[] bytes,int offset){
+        int hash = hash(bytes);
+        String key = String.format("%d/%d",hash,offset);
+        return key;
+    }
+
+    String availableKey(byte[] bytes){
         int hash = hash(bytes);
         for(int i=0;i<Integer.MAX_VALUE;i++){
             String key = String.format("%d/%d",hash,i);
@@ -93,8 +89,10 @@ public class LDBCollection implements Collection<byte[]> ,FireCollection{
 
         try{
             lock.lock();
-            int offset = countElement((byte[])o);
-            return offset > 0;
+            byte[] bytes = (byte[])o;
+            String key = key(bytes,0);
+            byte[] value = _db.get(key.getBytes());
+            return value != null;
         }finally {
             lock.unlock();
         }
@@ -117,7 +115,7 @@ public class LDBCollection implements Collection<byte[]> ,FireCollection{
 
     @Override
     public boolean add(byte[] bytes) {
-        String key = key(bytes);
+        String key = availableKey(bytes);
         try{
             lock.lock();
             _db.put(key.getBytes(),bytes);
