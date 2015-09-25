@@ -4,6 +4,7 @@ import com.lamfire.logger.Logger;
 import com.lamfire.utils.Maps;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -190,6 +191,15 @@ class PandoraImpl implements Pandora {
         LDBCollection result = (LDBCollection)dbs.get(key);
         if (result == null) {
             result = new LDBCollection(this.meta,new LDBDatabase(this.databaseMgr,key),key);
+            register(key, result);
+        }
+        return result;
+    }
+
+    public synchronized List<byte[]> getList(String key){
+        LDBList result = (LDBList)dbs.get(key);
+        if (result == null) {
+            result = new LDBList(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;

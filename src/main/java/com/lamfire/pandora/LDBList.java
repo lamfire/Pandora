@@ -1,5 +1,8 @@
 package com.lamfire.pandora;
 
+import com.lamfire.code.UUIDGen;
+import com.lamfire.utils.Bytes;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -14,9 +17,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * Time: 下午8:46
  * To change this template use File | Settings | File Templates.
  */
-public class LDBList implements List<byte[]> {
+public class LDBList implements List<byte[]>,FireCollection {
     private final Lock lock = new ReentrantLock();
-    private static final byte[] EMPTY_VALUE = {0};
     private final LDBMeta meta;
     private final LDBDatabase _db;
     private final byte[] sizeKey;
@@ -55,47 +57,58 @@ public class LDBList implements List<byte[]> {
 
     @Override
     public boolean contains(Object o) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public Iterator<byte[]> iterator() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new LDBValueIterator(LDBIteratorMgr.getInstance().openIterator(_db));
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public boolean add(byte[] bytes) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        if(bytes == null){
+            return false;
+        }
+        int index = size();
+        try{
+            lock.lock();
+            _db.put(Bytes.toBytes(index),bytes);
+            sizeCounter(1);
+            return true;
+        }finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public boolean addAll(Collection<? extends byte[]> c) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return true;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends byte[]> c) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
@@ -105,56 +118,73 @@ public class LDBList implements List<byte[]> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public void clear() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        try{
+            lock.lock();
+            meta.remove(sizeKey);
+            _db.clear();
+        }finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public byte[] get(int index) {
-        return new byte[0];  //To change body of implemented methods use File | Settings | File Templates.
+        try{
+            lock.lock();
+            return _db.get(Bytes.toBytes(index));
+        }finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public byte[] set(int index, byte[] element) {
-        return new byte[0];  //To change body of implemented methods use File | Settings | File Templates.
+        try{
+            lock.lock();
+            _db.put(Bytes.toBytes(index),element);
+            return element;
+        }finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public void add(int index, byte[] element) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public byte[] remove(int index) {
-        return new byte[0];  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public ListIterator<byte[]> listIterator() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public ListIterator<byte[]> listIterator(int index) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 
     @Override
     public List<byte[]> subList(int fromIndex, int toIndex) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not supported operation.");
     }
 }
