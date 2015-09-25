@@ -57,6 +57,17 @@ public class ListTester {
         Asserts.equalsAssert(rnd,Bytes.toInt(vBytes));
         System.out.println("set elements " + index + " = " + rnd + " [OK]");
 
+        try{
+            list.remove(8);
+        }catch (Exception e){
+            System.out.println("remove element throw Exception [OK]");
+        }
+
+        try{
+            list.remove(bytes);
+        }catch (Exception e){
+            System.out.println("remove element throw Exception [OK]");
+        }
 
         System.out.println("<<== finish : " + this.getClass().getName() +" - " +(System.currentTimeMillis() - startAt) +"ms");
     }
