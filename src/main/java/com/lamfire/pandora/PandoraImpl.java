@@ -25,7 +25,6 @@ class PandoraImpl implements Pandora {
     private final LDBMeta meta;
 
     public PandoraImpl(String storageDir){
-        LOGGER.info("Make 'PandoraImpl' : " + storageDir);
         this.storageDir = storageDir;
         this.databaseMgr = new LDBDatabaseMgr(storageDir);
         this.meta = new LDBMeta(this.databaseMgr);
@@ -33,7 +32,6 @@ class PandoraImpl implements Pandora {
     }
 
     public PandoraImpl(String storageDir, PandoraOptions options){
-        LOGGER.info("Make 'PandoraImpl' : " + storageDir);
         this.storageDir = storageDir;
         this.databaseMgr = new LDBDatabaseMgr(storageDir,options);
         this.meta = new LDBMeta(this.databaseMgr);
@@ -83,7 +81,7 @@ class PandoraImpl implements Pandora {
 
     @Override
     public Set<String> keys() {
-        return databaseNames.keySet();  //To change body of implemented methods use File | Settings | File Templates.
+        return databaseNames.keySet();
     }
 
     @Override
