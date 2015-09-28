@@ -1,8 +1,5 @@
 package com.lamfire.pandora;
 
-import com.lamfire.code.MurmurHash;
-
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
@@ -16,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Time: 下午8:55
  * To change this template use File | Settings | File Templates.
  */
-public class LDBSet implements Set<byte[]> ,FireCollection{
+public class LDBSet implements Set<byte[]> ,Container {
 
     private final Lock lock = new ReentrantLock();
     private static final byte[] EMPTY_VALUE = {0};

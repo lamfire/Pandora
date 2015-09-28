@@ -9,10 +9,10 @@ import java.util.List;
  * Time: 上午11:47
  * To change this template use File | Settings | File Templates.
  */
-public interface FireRank extends FireCollection {
+public interface Rank extends Container {
     public void put(String name);
 
-    public void incr(String name, long step);
+    public void increment(String name, long step);
 
     public void set(String name, long score);
 

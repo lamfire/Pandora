@@ -1,7 +1,7 @@
 package com.lamfire.pandora.test.benchmark;
 
 import com.lamfire.logger.Logger;
-import com.lamfire.pandora.FireMap;
+import com.lamfire.pandora.Increment;
 import com.lamfire.utils.Lists;
 import com.lamfire.utils.RandomUtils;
 import com.lamfire.utils.Threads;
@@ -11,32 +11,36 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FireMapBenchmark {
-    static final Logger logger = Logger.getLogger(FireMapBenchmark.class);
+public class IncrementBenchmark {
+    static final Logger logger = Logger.getLogger(IncrementBenchmark.class);
     static AtomicInteger atomic = new AtomicInteger();
     static AtomicInteger errorAtomic =   new AtomicInteger();
     static List<String> errorList = Lists.newArrayList();
     static TreeSet<Long> times = new TreeSet<Long>();
     static long timeMillisCount = 0;
     static long timeMillisAvg = 0;
-    private FireMap map ;
-    public FireMapBenchmark(FireMap fireMap) {
-        this.map  = fireMap;
+    private Increment increment ;
+
+
+    public IncrementBenchmark(Increment testIncrement){
+        this.increment  = testIncrement;
+
         Threads.scheduleWithFixedDelay(new Runnable() {
             int pre = 0;
             @Override
             public void run() {
+                synchronized (atomic){
                     int val = atomic.get();
-                    System.out.println("[COUNTER/S] : " +  (val - pre) +"/s " + map.size());
+                    System.out.println("[COUNTER/S] : " +  (val - pre) +"/s " + increment.size() +"/" +val);
                     pre = val;
-
+                }
             }
         },1,1, TimeUnit.SECONDS);
     }
 
-    private void put(String v,byte[] bytes){
+    private void write(String v){
         try{
-            map.put(v.getBytes(),bytes);
+            increment.increment(v);
         }   catch(Exception e){
              e.printStackTrace();
             errorAtomic.getAndIncrement();
@@ -44,11 +48,11 @@ public class FireMapBenchmark {
         }
     }
 
-    private byte[] get(int val){
+    private long read(String val){
         String key = String.valueOf(val);
         long startAt = System.currentTimeMillis();
         try{
-            return map.get(key.getBytes());
+            return increment.get(key);
         }   catch (Exception e){
             logger.error("error get (" + val +")",e);
             errorAtomic.getAndIncrement();
@@ -56,38 +60,43 @@ public class FireMapBenchmark {
         }finally{
             long usedMillis = System.currentTimeMillis() - startAt;
             timeMillisCount +=  usedMillis;
-            timeMillisAvg = timeMillisCount / (1+val);
         }
-        return null;
+        return 0;
     }
 	
 	private static class Writer implements Runnable  {
-        FireMapBenchmark test;
-        public Writer(FireMapBenchmark test){
+        IncrementBenchmark test;
+        public Writer(IncrementBenchmark test){
              this.test = test;
         }
 		@Override
 		public void run() {
-            byte[] bytes = RandomUtils.randomText(1000).getBytes();
+			long startAt = System.currentTimeMillis();
 			while(true){
-                int i = atomic.getAndIncrement();
-                test.put(String.valueOf(i),bytes);
+                synchronized (atomic){
+                atomic.getAndIncrement();
+                int val = RandomUtils.nextInt(100);
+                test.write(String.valueOf(val));
+				}
 			}
 		}
 	};
 
     private static class Reader implements Runnable{
-        FireMapBenchmark test;
-        public Reader(FireMapBenchmark test){
+        IncrementBenchmark test;
+        public Reader(IncrementBenchmark test){
             this.test = test;
         }
         public void run() {
             long startAt = System.currentTimeMillis();
-            long count = 0;
             while(true){
-                synchronized (atomic){
                 int i = atomic.getAndIncrement();
-                byte[] bytes = test.get(i);
+                int val = RandomUtils.nextInt(100);
+                long v = test.read(String.valueOf(val)) ;
+                if(i % 10000 == 0){
+                    long timeUsed = System.currentTimeMillis() - startAt;
+                    times.add(timeUsed);
+                    startAt = System.currentTimeMillis();
                 }
             }
         }
@@ -104,5 +113,4 @@ public class FireMapBenchmark {
             Threads.startup(new Reader(this));
         }
     }
-
 }

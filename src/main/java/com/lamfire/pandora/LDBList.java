@@ -1,6 +1,5 @@
 package com.lamfire.pandora;
 
-import com.lamfire.code.UUIDGen;
 import com.lamfire.utils.Bytes;
 
 import java.util.Collection;
@@ -17,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Time: 下午8:46
  * To change this template use File | Settings | File Templates.
  */
-public class LDBList implements List<byte[]>,FireCollection {
+public class LDBList implements List<byte[]>,Container {
     private final Lock lock = new ReentrantLock();
     private final LDBMeta meta;
     private final LDBDatabase _db;

@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-class LDBMap implements Map<byte[] ,byte[]> ,FireCollection{
+class LDBMap implements Map<byte[] ,byte[]> ,Container {
     private final Lock lock = new ReentrantLock();
     private final LDBMeta meta;
     private final LDBDatabase _db;

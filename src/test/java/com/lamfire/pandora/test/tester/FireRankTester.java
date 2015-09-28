@@ -1,7 +1,7 @@
 package com.lamfire.pandora.test.tester;
 
 
-import com.lamfire.pandora.FireRank;
+import com.lamfire.pandora.Rank;
 import com.lamfire.pandora.Item;
 import com.lamfire.utils.Asserts;
 import com.lamfire.utils.RandomUtils;
@@ -19,9 +19,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FireRankTester {
     long max_used_time = 0;
     AtomicInteger count = new AtomicInteger();
-    FireRank rank;
+    Rank rank;
 
-    public FireRankTester(FireRank rank){
+    public FireRankTester(Rank rank){
         this.rank = rank;
     }
 
@@ -105,10 +105,10 @@ public class FireRankTester {
         this.rank.set(name,0);
         System.out.println("set score to : 0");
         long startAt = System.currentTimeMillis();
-        this.rank.incr(name,1);
+        this.rank.increment(name,1);
         System.out.println("incr score : 1");
 
-        this.rank.incr(name,10);
+        this.rank.increment(name,10);
         System.out.println("incr score : 10");
         long score = this.rank.score(name);
         Asserts.equalsAssert(score,11);

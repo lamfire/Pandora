@@ -2,10 +2,10 @@ package com.lamfire.pandora.test;
 
 import com.lamfire.pandora.test.tester.*;
 import com.lamfire.pandora.*;
-import com.lamfire.utils.ArrayUtils;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,38 +17,38 @@ import java.util.Arrays;
 public class PandoraTest extends Abstract{
 
     public static void testIncrement(Pandora store) {
-        FireIncrement increment = store.getFireIncrement("increment_tester");
-        FireIncrementTester tester = new FireIncrementTester(increment);
+        Increment increment = store.getIncrement("increment_tester");
+        IncrementTester tester = new IncrementTester(increment);
         tester.test();
     }
 
     public static void testList(Pandora store) {
-        FireList list = store.getFireList("list_tester");
-        FireListTester tester = new FireListTester(list);
+        List<byte[]> list = store.getList("list_tester");
+        ListTester tester = new ListTester(list);
         tester.test();
     }
 
     public static void testMap(Pandora store) {
-        FireMap map = store.getFireMap("map_tester");
-        FireMapTester tester = new FireMapTester(map);
+        Map<byte[],byte[]> map = store.getMap("map_tester");
+        MapTester tester = new MapTester(map);
         tester.test();
     }
 
     public static void testQueue(Pandora store) {
-        FireQueue queue =store.getFireQueue("queue_tester");
-        FireQueueTester tester = new FireQueueTester(queue);
+        Queue queue =store.getQueue("queue_tester");
+        QueueTester tester = new QueueTester(queue);
         tester.test();
     }
 
     public static void testRank(Pandora store) {
-        FireRank set = store.getFireRank("rank_tester");
+        Rank set = store.getRank("rank_tester");
         FireRankTester tester = new FireRankTester(set);
         tester.test();
     }
 
     public static void testSet(Pandora store) {
-        FireSet set =store.getFireSet("set_tester");
-        FireSetTester tester = new FireSetTester(set);
+        Set<byte[]> set =store.getSet("set_tester");
+        SetTester tester = new SetTester(set);
         tester.test();
     }
 

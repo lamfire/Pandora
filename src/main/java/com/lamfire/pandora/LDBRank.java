@@ -21,8 +21,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * Time: 上午9:22
  * To change this template use File | Settings | File Templates.
  */
-class LDBFireRank implements FireRank {
-    private static final Logger LOGGER = Logger.getLogger(LDBFireRank.class);
+class LDBRank implements Rank {
+    private static final Logger LOGGER = Logger.getLogger(LDBRank.class);
     private final Lock lock = new ReentrantLock();
     private final LDBMeta meta;
     private final LDBDatabase _db;
@@ -31,7 +31,7 @@ class LDBFireRank implements FireRank {
     private final String name;
     private int seed = 11;
 
-    public LDBFireRank(LDBMeta meta,LDBDatabase db,LDBDatabase indexDB,String name) {
+    public LDBRank(LDBMeta meta, LDBDatabase db, LDBDatabase indexDB, String name) {
         this.meta = meta;
         this._db = db;
         this._indexDB = indexDB;
@@ -144,7 +144,7 @@ class LDBFireRank implements FireRank {
     }
 
     @Override
-    public void incr(String name, long step) {
+    public void increment(String name, long step) {
         try {
             lock.lock();
             long score = 0;

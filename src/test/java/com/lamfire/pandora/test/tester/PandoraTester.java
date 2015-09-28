@@ -1,9 +1,9 @@
 package com.lamfire.pandora.test.tester;
 
-import com.lamfire.pandora.FireMap;
-import com.lamfire.pandora.FireRank;
+import com.lamfire.pandora.Rank;
 import com.lamfire.pandora.Pandora;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -42,12 +42,12 @@ public class PandoraTester {
         size();
         //Asserts.assertEquals(size,0);
 
-        FireRank rank = store.getFireRank("STORE_RANK_TEST");
+        Rank rank = store.getRank("STORE_RANK_TEST");
         rank.put("1");
         keys();
         size();
 
-        FireMap map = store.getFireMap("STORE_MAP_TEST");
+        Map map = store.getMap("STORE_MAP_TEST");
         map.put("1".getBytes(),"1".getBytes());
         keys();
         size();

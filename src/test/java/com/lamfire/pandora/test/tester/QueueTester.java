@@ -1,7 +1,7 @@
 package com.lamfire.pandora.test.tester;
 
 
-import com.lamfire.pandora.FireQueue;
+import com.lamfire.pandora.Queue;
 import com.lamfire.utils.Asserts;
 
 /**
@@ -11,10 +11,10 @@ import com.lamfire.utils.Asserts;
  * Time: 上午11:06
  * To change this template use File | Settings | File Templates.
  */
-public class FireQueueTester {
-    FireQueue queue ;
+public class QueueTester {
+    Queue queue ;
 
-    public FireQueueTester(FireQueue queue){
+    public QueueTester(Queue queue){
         this.queue = queue;
     }
 
@@ -27,7 +27,7 @@ public class FireQueueTester {
         queue.push(s.getBytes());
         String peek = new String(queue.peek());
         Asserts.equalsAssert(s, peek);
-        String pop = new String(queue.pop());
+        String pop = new String(queue.pull());
         Asserts.equalsAssert(s, pop);
 
         for(int i=0;i<100;i++){
@@ -41,7 +41,7 @@ public class FireQueueTester {
         Asserts.equalsAssert(100,size);
 
         for(int i=0;i<100;i++){
-            String val = new String(queue.pop());
+            String val = new String(queue.pull());
             System.out.println("queue.pop():"+val);
             Asserts.equalsAssert(val,String.valueOf(i));
         }

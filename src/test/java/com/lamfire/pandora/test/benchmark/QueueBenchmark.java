@@ -1,10 +1,9 @@
 package com.lamfire.pandora.test.benchmark;
 
+
 import com.lamfire.logger.Logger;
-import com.lamfire.pandora.FireRank;
-import com.lamfire.pandora.Item;
+import com.lamfire.pandora.Queue;
 import com.lamfire.utils.Lists;
-import com.lamfire.utils.RandomUtils;
 import com.lamfire.utils.Threads;
 
 import java.util.List;
@@ -12,19 +11,19 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FireRankBenchmark {
-    static final Logger logger = Logger.getLogger(FireRankBenchmark.class);
+public class QueueBenchmark {
+    static final Logger logger = Logger.getLogger(QueueBenchmark.class);
     static AtomicInteger atomic = new AtomicInteger();
     static AtomicInteger errorAtomic =   new AtomicInteger();
     static List<String> errorList = Lists.newArrayList();
     static TreeSet<Long> times = new TreeSet<Long>();
     static long timeMillisCount = 0;
     static long timeMillisAvg = 0;
-    private FireRank rank ;
+    private Queue queue ;
 
 
-    public FireRankBenchmark(FireRank test){
-        this.rank  = test;
+    public QueueBenchmark(Queue testQueue){
+        this.queue  = testQueue;
 
         Threads.scheduleWithFixedDelay(new Runnable() {
             int pre = 0;
@@ -32,16 +31,7 @@ public class FireRankBenchmark {
             public void run() {
                 synchronized (atomic){
                     int val = atomic.get();
-                    List<Item> maxItems = rank.max(1);
-                    List<Item> minItems = rank.min(1);
-                    Item maxItem=null,minItem=null;
-                    if(!maxItems.isEmpty()){
-                        maxItem = maxItems.get(0);
-                    }
-                    if(!minItems.isEmpty()){
-                        minItem = minItems.get(0);
-                    }
-                    System.out.println("[COUNTER/S] : " +  (val - pre) +"/s " + rank.size() +"/" +val +",max=" + maxItem +",min=" +minItem);
+                    System.out.println("[COUNTER/S] : " +  (val - pre) +"/s " + queue.size() +"/" +val);
                     pre = val;
                 }
             }
@@ -50,7 +40,8 @@ public class FireRankBenchmark {
 
     private void put(String v){
         try{
-            rank.put(v);
+            byte[] bytes = v.getBytes();
+            queue.push(bytes);
         }   catch(Exception e){
              e.printStackTrace();
             errorAtomic.getAndIncrement();
@@ -58,11 +49,11 @@ public class FireRankBenchmark {
         }
     }
 
-    private long get(int val){
+    private byte[] get(int val){
         String key = String.valueOf(val);
         long startAt = System.currentTimeMillis();
         try{
-            return rank.score(key);
+            return queue.pull();
         }   catch (Exception e){
             logger.error("error get (" + val +")",e);
             errorAtomic.getAndIncrement();
@@ -72,12 +63,12 @@ public class FireRankBenchmark {
             timeMillisCount +=  usedMillis;
             timeMillisAvg = timeMillisCount / (1+val);
         }
-        return -1;
+        return null;
     }
 	
 	private static class Writer implements Runnable  {
-        FireRankBenchmark test;
-        public Writer(FireRankBenchmark test){
+        QueueBenchmark test;
+        public Writer(QueueBenchmark test){
              this.test = test;
         }
 		@Override
@@ -85,25 +76,23 @@ public class FireRankBenchmark {
 			long startAt = System.currentTimeMillis();
 			while(true){
                 synchronized (atomic){
-                atomic.getAndIncrement();
-                int val = RandomUtils.nextInt(100000);
-                test.put(String.valueOf(val));
+                int i = atomic.getAndIncrement();
+                test.put(String.valueOf(i));
 				}
 			}
 		}
 	};
 
     private static class Reader implements Runnable{
-        FireRankBenchmark test;
-        public Reader(FireRankBenchmark test){
+        QueueBenchmark test;
+        public Reader(QueueBenchmark test){
             this.test = test;
         }
         public void run() {
             long startAt = System.currentTimeMillis();
             while(true){
                 int i = atomic.getAndIncrement();
-                int val = RandomUtils.nextInt(100000);
-                long bytes = test.get(val) ;
+                byte[] bytes = test.get(i) ;
                 if(i % 10000 == 0){
                     long timeUsed = System.currentTimeMillis() - startAt;
                     times.add(timeUsed);

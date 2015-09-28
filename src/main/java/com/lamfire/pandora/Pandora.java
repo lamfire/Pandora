@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public interface Pandora {
+
     public void remove(String key);
 
     public long count();
@@ -14,17 +15,13 @@ public interface Pandora {
 
     public boolean exists(String key);
 
-    public FireIncrement getFireIncrement(String key);
+    public Increment getIncrement(String key);
 
-    public FireList getFireList(String key);
+    public Queue getQueue(String key);
 
-    public FireMap getFireMap(String key);
+    public BlockingQueue getBlockingQueue(String key);
 
-    public FireQueue getFireQueue(String key);
-
-    public FireSet getFireSet(String key);
-
-    public FireRank getFireRank(String key);
+    public Rank getRank(String key);
 
     public Map<byte[] ,byte[]> getMap(String key);
 

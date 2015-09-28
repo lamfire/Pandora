@@ -1,6 +1,5 @@
-package com.lamfire.pandora.queue;
+package com.lamfire.pandora;
 
-import com.lamfire.pandora.FireQueue;
 import com.lamfire.logger.Logger;
 
 /**
@@ -10,11 +9,11 @@ import com.lamfire.logger.Logger;
  * Time: 上午10:20
  * To change this template use File | Settings | File Templates.
  */
-public class BlockingQueue implements FireQueue {
+public class BlockingQueue implements Queue {
     private static final Logger LOGGER = Logger.getLogger(BlockingQueue.class);
-    private FireQueue queue;
+    private Queue queue;
 
-    public BlockingQueue(FireQueue queue) {
+    public BlockingQueue(Queue queue) {
         this.queue = queue;
     }
 
@@ -25,11 +24,11 @@ public class BlockingQueue implements FireQueue {
     }
 
     @Override
-    public synchronized byte[] pop() {
+    public synchronized byte[] pull() {
         byte[] result = null;
         do{
             try {
-                result = this.queue.pop();
+                result = this.queue.pull();
                 if(result == null){
                     this.wait();
                 }

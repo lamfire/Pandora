@@ -2,6 +2,7 @@ package com.lamfire.pandora;
 
 import com.lamfire.utils.Bytes;
 
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -12,14 +13,14 @@ import java.util.concurrent.locks.ReentrantLock;
  * Time: 下午3:39
  * To change this template use File | Settings | File Templates.
  */
-class LDBFireIncrement implements FireIncrement {
+class LDBIncrement implements Increment {
     private final Lock lock = new ReentrantLock();
     private final LDBMeta meta;
     private final LDBDatabase _db;
     private final byte[] sizeKey;
     private final String name;
 
-    public LDBFireIncrement(LDBMeta meta,LDBDatabase db,String name) {
+    public LDBIncrement(LDBMeta meta, LDBDatabase db, String name) {
         this.meta = meta;
         this.name = name;
         this._db = db;
@@ -43,13 +44,13 @@ class LDBFireIncrement implements FireIncrement {
     }
 
     @Override
-    public void incr(String name) {
-        incr(name, 1);
+    public void increment(String name) {
+        incrementAndGet(name, 1);
     }
 
     @Override
-    public void incr(String name, long step) {
-        incrGet(name,step);
+    public void increment(String name, long step) {
+        incrementAndGet(name, step);
     }
 
     @Override
@@ -84,25 +85,25 @@ class LDBFireIncrement implements FireIncrement {
     }
 
     @Override
-    public long incrGet(String name) {
-        return incrGet(name,1);
+    public long incrementAndGet(String name) {
+        return incrementAndGet(name, 1);
     }
 
     @Override
-    public long incrGet(String name, long step) {
+    public long incrementAndGet(String name, long step) {
         try {
             lock.lock();
             byte[] key = asBytes(name);
-            long value = 0;
+            AtomicLong value = new AtomicLong(0);
             byte[] bytes = getDB().get(key);
             if (bytes != null) {
-                value = Bytes.toLong(bytes);
+                value.set(Bytes.toLong(bytes));
             } else {
                 incrSize();
             }
-            value += step;
-            getDB().put(key, Bytes.toBytes(value));
-            return value;
+            value.addAndGet(step);
+            getDB().put(key, Bytes.toBytes(value.get()));
+            return value.get();
         } finally {
             lock.unlock();
         }

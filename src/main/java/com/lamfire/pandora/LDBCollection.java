@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class LDBCollection implements Collection<byte[]> ,FireCollection{
+public class LDBCollection implements Collection<byte[]> ,Container {
     private final Lock lock = new ReentrantLock();
     private final LDBMeta meta;
     private final LDBDatabase _db;

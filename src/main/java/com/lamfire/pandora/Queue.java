@@ -1,10 +1,10 @@
 package com.lamfire.pandora;
 
-public interface FireQueue extends FireCollection {
+public interface Queue extends Container {
 
     public void push(byte[] value);
 
-    public byte[] pop();
+    public byte[] pull();
 
     public byte[] peek();
 }

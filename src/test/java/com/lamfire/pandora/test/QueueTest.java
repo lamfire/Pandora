@@ -1,8 +1,8 @@
 package com.lamfire.pandora.test;
 
-import com.lamfire.pandora.test.benchmark.FireQueueBenchmark;
-import com.lamfire.pandora.test.tester.FireQueueTester;
-import com.lamfire.pandora.FireQueue;
+import com.lamfire.pandora.Queue;
+import com.lamfire.pandora.test.benchmark.QueueBenchmark;
+import com.lamfire.pandora.test.tester.QueueTester;
 import com.lamfire.utils.ArrayUtils;
 
 /**
@@ -12,16 +12,16 @@ import com.lamfire.utils.ArrayUtils;
  * Time: 上午10:25
  * To change this template use File | Settings | File Templates.
  */
-public class FireQueueTest extends Abstract{
+public class QueueTest extends Abstract{
     public static void benchmark() {
-        FireQueue queue = getPandora().getFireQueue("benchmark_queue");
-        FireQueueBenchmark benchmark = new FireQueueBenchmark(queue);
+        Queue queue = getPandora().getQueue("benchmark_queue");
+        QueueBenchmark benchmark = new QueueBenchmark(queue);
         benchmark.startupBenchmarkRead(1);
     }
 
     public static void test() {
-        FireQueue queue = getPandora().getFireQueue("queue_tester");
-        FireQueueTester tester = new FireQueueTester(queue);
+        Queue queue = getPandora().getQueue("queue_tester");
+        QueueTester tester = new QueueTester(queue);
         tester.test();
     }
 

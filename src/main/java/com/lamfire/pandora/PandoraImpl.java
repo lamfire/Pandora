@@ -18,7 +18,7 @@ import java.util.Set;
 class PandoraImpl implements Pandora {
     private static final Logger LOGGER = Logger.getLogger(PandoraImpl.class);
 
-    private final Map<String, FireCollection> dbs = Maps.newHashMap();
+    private final Map<String, Container> dbs = Maps.newHashMap();
     private final Map<String,String> databaseNames = Maps.newHashMap();
     private final String storageDir;
     private final LDBDatabaseMgr databaseMgr;
@@ -51,24 +51,7 @@ class PandoraImpl implements Pandora {
         }
     }
 
-    private void preLoadDatabase(String name,String className){
-        LOGGER.info("Loading data collection [" + name +"] : " + className);
-        if ("LDBFireSet".equals(className)){
-                getFireSet(name);
-        }else if("LDBFireList".equals(className)){
-                getFireList(name);
-        }else if("LDBFireRank".equals(className)){
-            getFireRank(name);
-        }else if("LDBFireQueue".equals(className)){
-            getFireQueue(name);
-        }else if("LDBFireIncrement".equals(className)){
-            getFireIncrement(name);
-        }else if("LDBFireMap".equals(className)){
-            getFireMap(name);
-        }
-    }
-
-    private void register(String name,FireCollection col){
+    private void register(String name,Container col){
         String clsName = col.getClass().getSimpleName();
         byte[] dbKey = meta.getDatabaseKeyByName(name);
         meta.setValue(dbKey, databaseMgr.asBytes(clsName));
@@ -79,7 +62,7 @@ class PandoraImpl implements Pandora {
     private void unregister(String name){
         byte[] dbKey = meta.getDatabaseKeyByName(name);
 
-        FireCollection col = dbs.remove(name);
+        Container col = dbs.remove(name);
         if(col != null){
             col.clear();
         }
@@ -109,60 +92,36 @@ class PandoraImpl implements Pandora {
     }
 
     @Override
-    public synchronized FireIncrement getFireIncrement(String key) {
-        FireIncrement result = (FireIncrement)dbs.get(key);
+    public synchronized Increment getIncrement(String key) {
+        Increment result = (Increment)dbs.get(key);
         if (result == null) {
-            result = new LDBFireIncrement(this.meta,new LDBDatabase(this.databaseMgr,key),key);
+            result = new LDBIncrement(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;
     }
 
+
     @Override
-    public synchronized FireList getFireList(String key) {
-        FireList result = (FireList)dbs.get(key);
+    public synchronized Queue getQueue(String key) {
+        Queue result = (Queue)dbs.get(key);
         if (result == null) {
-            result = new LDBFireList(this.meta,new LDBDatabase(this.databaseMgr,key),key);
+            result = new LDBQueue(this.meta,new LDBDatabase(this.databaseMgr,key),key);
             register(key, result);
         }
         return result;
     }
 
-    @Override
-    public synchronized FireMap getFireMap(String key) {
-        FireMap result = (FireMap)dbs.get(key);
-        if (result == null) {
-            result = new LDBFireMap(this.meta,new LDBDatabase(this.databaseMgr,key),key);
-            register(key, result);
-        }
-        return result;
+    public BlockingQueue getBlockingQueue(String key){
+        Queue queue = getQueue(key);
+        return new BlockingQueue(queue);
     }
 
     @Override
-    public synchronized FireQueue getFireQueue(String key) {
-        FireQueue result = (FireQueue)dbs.get(key);
+    public synchronized Rank getRank(String key) {
+        Rank result = (Rank)dbs.get(key);
         if (result == null) {
-            result = new LDBFireQueue(this.meta,new LDBDatabase(this.databaseMgr,key),key);
-            register(key, result);
-        }
-        return result;
-    }
-
-    @Override
-    public synchronized FireSet getFireSet(String key) {
-        FireSet result = (FireSet)dbs.get(key);
-        if (result == null) {
-            result = new LDBFireSet(this.meta,new LDBDatabase(this.databaseMgr,key),key);
-            register(key, result);
-        }
-        return result;
-    }
-
-    @Override
-    public synchronized FireRank getFireRank(String key) {
-        FireRank result = (FireRank)dbs.get(key);
-        if (result == null) {
-            result = new LDBFireRank(this.meta,new LDBDatabase(this.databaseMgr,key),new LDBDatabase(this.databaseMgr,key+"_idx"),key);
+            result = new LDBRank(this.meta,new LDBDatabase(this.databaseMgr,key),new LDBDatabase(this.databaseMgr,key+"_idx"),key);
             register(key, result);
         }
         return result;

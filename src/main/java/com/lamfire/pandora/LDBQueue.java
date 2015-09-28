@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Time: 上午9:56
  * To change this template use File | Settings | File Templates.
  */
-class LDBFireQueue implements FireQueue {
+class LDBQueue implements Queue {
     private final Lock lock = new ReentrantLock();
     private final LDBMeta meta;
     private final LDBDatabase _db;
@@ -26,7 +26,7 @@ class LDBFireQueue implements FireQueue {
 
     private final String name;
 
-    public LDBFireQueue(LDBMeta meta,LDBDatabase db,String name) {
+    public LDBQueue(LDBMeta meta, LDBDatabase db, String name) {
         this.meta = meta;
         this.name = name;
         this._db = db;
@@ -75,7 +75,7 @@ class LDBFireQueue implements FireQueue {
     }
 
     @Override
-    public byte[] pop() {
+    public byte[] pull() {
         try {
             lock.lock();
             byte[] bytes = peek();

@@ -1,6 +1,6 @@
 package com.lamfire.pandora;
 
-public interface FireCollection {
+public interface Container {
 
     public int size();
 

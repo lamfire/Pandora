@@ -1,7 +1,7 @@
 package com.lamfire.pandora.test.tester;
 
 
-import com.lamfire.pandora.FireIncrement;
+import com.lamfire.pandora.Increment;
 import com.lamfire.utils.Asserts;
 
 /**
@@ -11,10 +11,10 @@ import com.lamfire.utils.Asserts;
  * Time: 上午10:14
  * To change this template use File | Settings | File Templates.
  */
-public class FireIncrementTester {
-    FireIncrement inc;
+public class IncrementTester {
+    Increment inc;
 
-    public FireIncrementTester( FireIncrement inc){
+    public IncrementTester(Increment inc){
        this.inc =inc ;
     }
 
@@ -36,7 +36,7 @@ public class FireIncrementTester {
         int count = 1000;
         int seed = 10;
         for(int i=0;i<count;i++){
-            inc.incrGet(name,seed);
+            inc.incrementAndGet(name, seed);
         }
         long timeUsed = System.currentTimeMillis() - startAt;
         System.out.println("increment.incrGet() times:"+count+",time_millis:" + timeUsed+ " ms");
@@ -48,7 +48,7 @@ public class FireIncrementTester {
 
         startAt = System.currentTimeMillis();
         for(int i=0;i<count;i++){
-            inc.incr(name, 0 - seed);
+            inc.increment(name, 0 - seed);
         }
 
         timeUsed = System.currentTimeMillis() - startAt;
@@ -61,7 +61,7 @@ public class FireIncrementTester {
 
         startAt = System.currentTimeMillis();
         for(int i=0;i<count;i++){
-            inc.incr(name,seed);
+            inc.increment(name, seed);
         }
         timeUsed = System.currentTimeMillis() - startAt;
         System.out.println("increment.incr() times:"+count+" time_millis:" + timeUsed+ " ms");
@@ -71,7 +71,7 @@ public class FireIncrementTester {
 
         startAt = System.currentTimeMillis();
         for(int i=0;i<count;i++){
-            inc.incr(name, 0 - seed);
+            inc.increment(name, 0 - seed);
         }
 
         timeUsed = System.currentTimeMillis() - startAt;

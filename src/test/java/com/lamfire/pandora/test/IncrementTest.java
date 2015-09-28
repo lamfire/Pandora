@@ -1,8 +1,8 @@
 package com.lamfire.pandora.test;
 
-import com.lamfire.pandora.test.benchmark.FireIncrementBenchmark;
-import com.lamfire.pandora.test.tester.FireIncrementTester;
-import com.lamfire.pandora.FireIncrement;
+import com.lamfire.pandora.Increment;
+import com.lamfire.pandora.test.benchmark.IncrementBenchmark;
+import com.lamfire.pandora.test.tester.IncrementTester;
 import com.lamfire.utils.ArrayUtils;
 
 /**
@@ -12,17 +12,17 @@ import com.lamfire.utils.ArrayUtils;
  * Time: 下午3:53
  * To change this template use File | Settings | File Templates.
  */
-public class FireIncrementTest extends Abstract{
+public class IncrementTest extends Abstract{
 
     public static void benchmark() {
-        FireIncrement increment = getPandora().getFireIncrement("increment_benchmark") ;
-        FireIncrementBenchmark benchmark = new FireIncrementBenchmark(increment);
+        Increment increment = getPandora().getIncrement("increment_benchmark") ;
+        IncrementBenchmark benchmark = new IncrementBenchmark(increment);
         benchmark.startupBenchmarkRead(1);
     }
 
     public static void test() {
-        FireIncrement increment = getPandora().getFireIncrement("increment_tester");
-        FireIncrementTester tester = new FireIncrementTester(increment);
+        Increment increment = getPandora().getIncrement("increment_tester");
+        IncrementTester tester = new IncrementTester(increment);
         tester.test();
     }
 
