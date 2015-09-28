@@ -1,1 +1,3 @@
-This file was created by IntelliJ IDEA 11.1.4 for binding GitHub repository
+Pandora provides concurrent Collection,List,Set,Map,Queue,Increment and Rank backed by disk storage.
+Pandora is free as speech and free as beer under
+[Apache License 2.0]
