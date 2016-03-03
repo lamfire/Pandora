@@ -7,7 +7,7 @@ Pandora is free as speech and free as beer under [Apache License 2.0]
 
 PandoraMaker maker = new PandoraMaker("/data/pandora");
 maker.createIfMissing(true);
-pandora = maker.make();
+Pandora pandora = maker.make();
 
 List<byte[]> list = pandora.getList("list1");
 list.add(...);
