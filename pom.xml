@@ -6,7 +6,7 @@
 
     <groupId>com.lamfire</groupId>
     <artifactId>pandora</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.lamfire</groupId>
             <artifactId>lamfire</artifactId>
-            <version>2.3.10</version>
+            <version>2.3.15</version>
         </dependency>
         <dependency>
             <groupId>com.lamfire</groupId>
