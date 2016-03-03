@@ -24,7 +24,7 @@ class LDBDatabaseMgr {
 
     private final Lock lock = new ReentrantLock();
 	private final Map<String, DB> dbs = Maps.newHashMap(); //dbs
-    private final Map<String, LDBDatabase> databases = Maps.newHashMap(); //dbs
+    private final Map<String, LDBDatabase> databases = Maps.newHashMap(); //databases
     private final Map<String,Long> lastAccessTimeRecorder = Maps.newHashMap();
 
     private final DBFactory factory ;
@@ -32,11 +32,8 @@ class LDBDatabaseMgr {
     private final Options options;
 
 	public LDBDatabaseMgr(String rootDir) {
-		this.rootDir = rootDir;
-        this.options = new Options();
+		this(rootDir,new Options());
         this.options.createIfMissing(true);
-        this.factory = new JniDBFactory();
-        PandoraSchedules.scheduleWithFixedDelay(new AutoCloseIdleDatabaseTask(),5,5, TimeUnit.MINUTES);
 	}
 
     public LDBDatabaseMgr(String rootDir, Options options) {
