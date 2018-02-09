@@ -7,28 +7,28 @@ import java.util.Set;
 
 public interface Pandora {
 
-    public void remove(String key);
+    void remove(String key);
 
-    public long count();
+    long count();
 
-    public Set<String> keys();
+    Set<String> keys();
 
-    public boolean exists(String key);
+    boolean exists(String key);
 
-    public Increment getIncrement(String key);
+    Increment getIncrement(String key);
 
-    public Queue getQueue(String key);
+    Queue getQueue(String key);
 
-    public BlockingQueue getBlockingQueue(String key);
+    BlockingQueue getBlockingQueue(String key);
 
-    public Rank getRank(String key);
+    Rank getRank(String key);
 
-    public Map<byte[] ,byte[]> getMap(String key);
+    Map<byte[] ,byte[]> getMap(String key);
 
-    public Set<byte[]> getSet(String key);
+    Set<byte[]> getSet(String key);
 
-    public Collection<byte[]> getCollection(String key);
+    Collection<byte[]> getCollection(String key);
 
-    public List<byte[]> getList(String key);
+    List<byte[]> getList(String key);
 
 }
